@@ -1,0 +1,98 @@
+{
+  "runs": [
+    {
+      "runId": "run-1769589846878",
+      "timestamp": "2026-01-28T08:44:06.878Z"
+    },
+    {
+      "runId": "run-1769589944292",
+      "timestamp": "2026-01-28T08:45:44.292Z"
+    }
+  ],
+  "tests": {
+    "ApiTest.spec.js:: product API Get test": [
+      {
+        "passed": true,
+        "duration": 1230,
+        "timestamp": "2026-01-28T08:44:22.926Z",
+        "runId": "run-1769589846878",
+        "skipped": false,
+        "retry": 0
+      },
+      {
+        "passed": true,
+        "duration": 812,
+        "timestamp": "2026-01-28T08:45:53.630Z",
+        "runId": "run-1769589944292",
+        "skipped": false,
+        "retry": 0
+      }
+    ],
+    "ApiTest.spec.js::Booking API Create, update and delete test": [
+      {
+        "passed": true,
+        "duration": 9491,
+        "timestamp": "2026-01-28T08:44:22.926Z",
+        "runId": "run-1769589846878",
+        "skipped": false,
+        "retry": 0
+      },
+      {
+        "passed": true,
+        "duration": 5020,
+        "timestamp": "2026-01-28T08:45:53.630Z",
+        "runId": "run-1769589944292",
+        "skipped": false,
+        "retry": 0
+      }
+    ],
+    "TestCheck.spec.js::API Performance Health Checks (soft assertions)": [
+      {
+        "passed": false,
+        "duration": 14004,
+        "timestamp": "2026-01-28T08:44:22.926Z",
+        "runId": "run-1769589846878",
+        "skipped": false,
+        "retry": 0
+      },
+      {
+        "passed": true,
+        "duration": 7222,
+        "timestamp": "2026-01-28T08:45:53.630Z",
+        "runId": "run-1769589944292",
+        "skipped": false,
+        "retry": 0
+      }
+    ]
+  },
+  "summaries": [
+    {
+      "runId": "run-1769589846878",
+      "timestamp": "2026-01-28T08:44:06.878Z",
+      "total": 3,
+      "passed": 2,
+      "failed": 1,
+      "skipped": 0,
+      "flaky": 0,
+      "slow": 0,
+      "duration": 16048,
+      "passRate": 67
+    },
+    {
+      "runId": "run-1769589944292",
+      "timestamp": "2026-01-28T08:45:44.292Z",
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 1,
+      "slow": 0,
+      "duration": 9338,
+      "passRate": 100
+    }
+  ],
+  "runFiles": {
+    "run-1769589846878": "./history-runs/run-1769589846878.json",
+    "run-1769589944292": "./history-runs/run-1769589944292.json"
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "runId": "run-1769589944292",
+  "timestamp": "2026-01-28T08:45:44.292Z",
+  "tests": {
+    "ApiTest.spec.js:: product API Get test": {
+      "testId": "ApiTest.spec.js:: product API Get test",
+      "title": " product API Get test",
+      "file": "ApiTest.spec.js",
+      "status": "passed",
+      "duration": 812,
+      "retry": 0,
+      "steps": [
+        {
+          "title": "Create request context",
+          "duration": 19,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products/1\"",
+          "duration": 727,
+          "category": "pw:api",
+          "isSlowest": true
+        }
+      ]
+    },
+    "ApiTest.spec.js::Booking API Create, update and delete test": {
+      "testId": "ApiTest.spec.js::Booking API Create, update and delete test",
+      "title": "Booking API Create, update and delete test",
+      "file": "ApiTest.spec.js",
+      "status": "passed",
+      "duration": 5020,
+      "retry": 0,
+      "steps": [
+        {
+          "title": "Create request context",
+          "duration": 4,
+          "category": "pw:api"
+        },
+        {
+          "title": "POST \"/auth\"",
+          "duration": 2392,
+          "category": "pw:api",
+          "isSlowest": true
+        },
+        {
+          "title": "GET \"/booking/2\"",
+          "duration": 378,
+          "category": "pw:api"
+        },
+        {
+          "title": "POST \"/booking\"",
+          "duration": 1225,
+          "category": "pw:api"
+        },
+        {
+          "title": "PUT \"/booking/2359\"",
+          "duration": 434,
+          "category": "pw:api"
+        },
+        {
+          "title": "DELETE \"/booking/2359\"",
+          "duration": 470,
+          "category": "pw:api"
+        }
+      ]
+    },
+    "TestCheck.spec.js::API Performance Health Checks (soft assertions)": {
+      "testId": "TestCheck.spec.js::API Performance Health Checks (soft assertions)",
+      "title": "API Performance Health Checks (soft assertions)",
+      "file": "TestCheck.spec.js",
+      "status": "passed",
+      "duration": 7222,
+      "retry": 0,
+      "steps": [
+        {
+          "title": "Create request context",
+          "duration": 4,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 698,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 789,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 188,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 215,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 121,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 277,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 112,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 114,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 322,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 669,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 170,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 158,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 112,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 114,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 123,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 223,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 101,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 194,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 212,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/products\"",
+          "duration": 195,
+          "category": "pw:api"
+        },
+        {
+          "title": "GET \"/booking\"",
+          "duration": 2020,
+          "category": "pw:api",
+          "isSlowest": true
+        }
+      ]
+    }
+  }
+}
