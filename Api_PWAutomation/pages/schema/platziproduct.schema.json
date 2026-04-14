@@ -1,0 +1,44 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": [
+        "title",
+        "slug",
+        "price",
+        "description",
+        "categoryId",
+        "images"
+    ],
+    "properties": {
+        "title": {
+            "type": "string",
+            "minLength": 1
+        },
+        "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9\\-\\s]+$",
+            "description": "URL-friendly string (lowercase, allows spaces and hyphens)"
+        },
+        "price": {
+            "type": "number",
+            "minimum": 0
+        },
+        "description": {
+            "type": "string",
+            "minLength": 1
+        },
+        "categoryId": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "images": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "string",
+                "format": "uri"
+            }
+        }
+    },
+    "additionalProperties": false
+}

@@ -1,0 +1,11 @@
+{
+    "title": "Running Shoes 8",
+    "slug": "running-shoes 8",
+    "price": 2500,
+    "description": "Lightweight and comfortable running shoes designed for daily training.",
+    "categoryId": 13,
+    "images": [
+        "https://picsum.photos/300",
+        "https://picsum.photos/301"
+    ]
+}
