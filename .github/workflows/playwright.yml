@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        working-directory: PlaywrightNPM
+        working-directory: Api_PWAutomation
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium 
