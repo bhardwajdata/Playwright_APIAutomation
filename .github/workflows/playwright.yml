@@ -18,11 +18,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
+        with:     
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: Api_PWAutomation/package-lock.json
 
       - name: List contents of working directory
         run: ls -R
