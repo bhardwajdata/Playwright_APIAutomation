@@ -1,10 +1,10 @@
 const { test, expect } = require('@playwright/test')
-const BookingApi = require('../pages/api/bookingapi')
-const newbooking = require('../pages/payloads/newbooking.json')
-const updatebooking = require('../pages/payloads/updatebooking.json')
-const { validateSchema } = require('../pages/utils/schemaValidator');
+const BookingApi = require('../../pages/api/bookingapi')
+const newbooking = require('../../pages/payloads/newbooking.json')
+const updatebooking = require('../../pages/payloads/updatebooking.json')
+const { validateSchema } = require('../../pages/utils/schemaValidator');
 
-test.describe('Booking Api CRUD Operations @api', () => {
+test.describe('Booking Api CRUD Operations', () => {
     test('Get Booking by ID', async ({ request }) => {
         const bookingApi = new BookingApi(request);
         const response = await bookingApi.getBookingid(10);
