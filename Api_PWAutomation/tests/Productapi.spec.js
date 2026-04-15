@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
-import ProductApi from '../../pages/api/productapi'
+import ProductApi from '../pages/api/productapi'
 
-test.describe('Api CRUD Operations', () => {
+test.describe('Api CRUD Operations @api', () => {
     test('Get Product by ID', async ({ request }) => {
         const productApi = new ProductApi(request);
         const response = await productApi.getProductid(6);

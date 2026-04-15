@@ -1,10 +1,10 @@
 const { test, expect } = require('@playwright/test')
-const platziproductapi = require('../../pages/api/platziproductapi');
-const product = require('../../pages/payloads/platzi/product.json');
-const updateproduct = require('../../pages/payloads/platzi/updateproduct.json');
-const { validateSchema } = require('../../pages/utils/schemaValidator');
+const platziproductapi = require('../pages/api/platziproductapi');
+const product = require('../pages/payloads/platzi/product.json');
+const updateproduct = require('../pages/payloads/platzi/updateproduct.json');
+const { validateSchema } = require('../pages/utils/schemaValidator');
 
-test.describe('Api opertation check', () => {
+test.describe('Api opertation check @api', () => {
     test('Normal flow check', async ({ request }) => {
         const getproduct = new platziproductapi(request);
         const response = await getproduct.getplatziproductid(95);
