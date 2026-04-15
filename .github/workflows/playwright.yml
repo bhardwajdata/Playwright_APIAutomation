@@ -36,7 +36,7 @@ jobs:
         run: npx playwright install --with-deps chromium 
 
       - name: Run Playwright API tests
-        run: npx @playwright/test test --grep '@api' --reporter=html
+        run: npx playwright test --grep "@api" --reporter=html
 
       - name: Upload Playwright report
         if: always()
