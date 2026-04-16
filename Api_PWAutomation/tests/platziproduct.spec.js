@@ -1,3 +1,4 @@
+// @ts-check
 const { test, expect } = require('@playwright/test')
 const platziproductapi = require('../pages/api/platziproductapi');
 const product = require('../pages/payloads/platzi/product.json');
@@ -25,14 +26,16 @@ test.describe('Api opertation check @api', () => {
         expect(typeof responseBody.category.image).toBe('string');
         expect(typeof responseBody.category.creationAt).toBe('string');
         expect(typeof responseBody.category.updatedAt).toBe('string');
+        console.log('Get product flow passed!')
     })
 
     test('Create New Product', async ({ request }) => {
+        const createproduct = new platziproductapi(request);
         console.log('Validating product schema...');
         validateSchema('pages/schema/platziproduct.schema.json', product);
         console.log('Product schema validated successfully.');
 
-        const createproduct = new platziproductapi(request);
+        console.log('Product creation flow started');
         const response = await createproduct.createproduct(product);
         expect(response.status()).toBe(201);
         console.log('Status is ' + response.status());
@@ -40,7 +43,6 @@ test.describe('Api opertation check @api', () => {
         console.log(responseBody);
         const CreateProductId = responseBody.id;
         console.log('Product created successfully with ID:', CreateProductId);
-
         expect(typeof responseBody.title).toBe('string');
         expect(typeof responseBody.price).toBe('number');
         expect(typeof responseBody.description).toBe('string');

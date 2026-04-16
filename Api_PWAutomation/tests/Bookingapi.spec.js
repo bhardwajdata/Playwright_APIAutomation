@@ -38,7 +38,7 @@ test.describe('Booking Api CRUD Operations @api', () => {
         const authdata = responseBody.token;
 
         const bookingApi = new BookingApi(request);
-        const response = await bookingApi.getBookingid(5);
+        const response = await bookingApi.getBookingid(10);
         expect(response.status()).toBe(200);
         console.log('Booking details fetched successfully!');
         validateSchema('pages/schema/newBooking.schema.json', newbooking);
