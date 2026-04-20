@@ -3,12 +3,18 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
-  workers: 1,
+  workers: 3,
   fullyParallel: true,
+
   reporter: [
-    ['dot'],
-    ['html', { open: 'never' }]
+    ['list'],
+    ['playwright-smart-reporter', {
+      outputFolder: 'test-results',
+      filename: 'report.html',
+      open: 'never'
+    }]
   ],
+
   use: {
     trace: 'on-first-retry',
     screenshot: 'only-on-failure'

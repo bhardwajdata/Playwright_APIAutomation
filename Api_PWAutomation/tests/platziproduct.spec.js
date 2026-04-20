@@ -8,11 +8,11 @@ const { validateSchema } = require('../pages/utils/schemaValidator');
 test.describe('Api opertation check @api', () => {
     test('Normal flow check', async ({ request }) => {
         const getproduct = new platziproductapi(request);
-        const response = await getproduct.getplatziproductid(95);
+        const response = await getproduct.getplatziproductid(50);
         expect(response.status()).toBe(200);
         console.log('Status is ' + response.status());
         const responseBody = await response.json();
-        expect(responseBody.id).toBe(95);
+        expect(responseBody.id).toBe(50);
         expect(typeof responseBody.title).toBe('string');
         expect(typeof responseBody.price).toBe('number');
         expect(typeof responseBody.description).toBe('string');

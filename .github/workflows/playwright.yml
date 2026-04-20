@@ -1,10 +1,10 @@
 name: API Automation Workflow
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   api-tests:
@@ -41,12 +41,13 @@ jobs:
         working-directory: Api_PWAutomation  
 
       - name: Run Playwright API tests
-        run: npx playwright test --grep '@api' --reporter=html
+        run: npx playwright test --grep '@api' --reporter=list,playwright-smart-reporter --output=test-results/
         working-directory: Api_PWAutomation
 
-      - name: Upload Playwright report
+      - name: Upload artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: playwright-report/
+          path: Api_PWAutomation/tests/index.html
+
