@@ -10,7 +10,6 @@ module.exports = defineConfig({
     ['list'],
     ['playwright-smart-reporter', {
       outputFolder: 'test-results',
-      filename: 'report.html',
       open: 'never'
     }]
   ],
