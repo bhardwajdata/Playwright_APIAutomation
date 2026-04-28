@@ -1,65 +1,113 @@
-const { test, expect } = require('@playwright/test')
-const BookingApi = require('../pages/api/bookingapi')
-const newbooking = require('../pages/payloads/newbooking.json')
-const updatebooking = require('../pages/payloads/updatebooking.json')
+const path = require('path');
+const { test, expect } = require('@playwright/test');
+const BookingApi = require('../pages/api/bookingapi');
+const newbooking = require('../pages/payloads/newbooking.json');
+const updatebooking = require('../pages/payloads/updatebooking.json');
 const { validateSchema } = require('../pages/utils/schemaValidator');
 
+const bookingSchemaPath = path.resolve(__dirname, '../pages/schema/newBooking.schema.json');
+
 test.describe('Booking Api CRUD Operations @api', () => {
-    test('Get Booking by ID', async ({ request }) => {
-        const bookingApi = new BookingApi(request);
-        const response = await bookingApi.getBookingid(10);
-        expect(response.status()).toBe(200);
-        console.log('Status Code: ' + response.status());
+    test.describe.configure({ mode: 'serial' });
 
-        const responseBody = await response.json();
-        expect(typeof responseBody.firstname).toBe('string');
-        expect(typeof responseBody.lastname).toBe('string');
-        expect(typeof responseBody.totalprice).toBe('number');
-        expect(typeof responseBody.depositpaid).toBe('boolean');
-        expect(typeof responseBody.bookingdates).toBe('object');
-        expect(typeof responseBody.bookingdates.checkin).toBe('string');
-        expect(typeof responseBody.bookingdates.checkout).toBe('string');
-        console.log('Body type validation check Passed!');
-    })
+    let bookingApi;
+    let authToken;
+    let cleanupBookingIds;
 
-    test('Auth Generation,Booking creation and update with Auth', async ({ request }) => {
-        const auth = await request.post('https://restful-booker.herokuapp.com/auth', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: {
-                "username": "admin",
-                "password": "password123"
-            }
+    test.beforeEach(async ({ request }) => {
+        bookingApi = new BookingApi(request);
+        cleanupBookingIds = [];
+
+        await test.step('Generate auth token for secured booking operations', async () => {
+            const authResponse = await bookingApi.createToken();
+            expect(authResponse.status()).toBe(200);
+
+            const authBody = await authResponse.json();
+            expect(authBody.token).toBeTruthy();
+            authToken = authBody.token;
         });
-        expect(auth.status()).toBe(200);
-        console.log('Status Code: ' + auth.status());
-        const responseBody = await auth.json();
-        const authdata = responseBody.token;
+    });
 
-        const bookingApi = new BookingApi(request);
-        const response = await bookingApi.getBookingid(10);
-        expect(response.status()).toBe(200);
-        console.log('Booking details fetched successfully!');
-        validateSchema('pages/schema/newBooking.schema.json', newbooking);
-        console.log('New booking payload validated against schema.');
+    test.afterEach(async () => {
+        for (const bookingId of cleanupBookingIds) {
+            const deleteResponse = await bookingApi.deletebooking(
+                bookingId,
+                bookingApi.getTokenHeaders(authToken)
+            );
 
-        const createResponse = await bookingApi.createbooking(newbooking);
+            expect(deleteResponse.ok()).toBeTruthy();
+        }
+    });
+
+    function buildBookingPayload(basePayload) {
+        return {
+            ...JSON.parse(JSON.stringify(basePayload)),
+            firstname: `${basePayload.firstname}-${Date.now()}`,
+            lastname: `${basePayload.lastname}-${Math.floor(Math.random() * 1000)}`
+        };
+    }
+
+    async function createBooking(payload) {
+        const createResponse = await bookingApi.createbooking(payload);
         expect(createResponse.status()).toBe(200);
+
         const createBody = await createResponse.json();
-        expect(createBody).toHaveProperty('bookingid');
-        const BookingId = createBody.bookingid;
-        console.log('Booking created successfully with ID:', BookingId);
-        console.log('Updating booking with ID:', BookingId);
-        const updateResponse = await bookingApi.updatebooking(
-            BookingId,
-            updatebooking
-        );
-        expect(updateResponse.status()).toBe(200);
-        const updatedBody = await updateResponse.json();
-        console.log(updatedBody);
-        console.log('Booking updated successfully with ID:', BookingId);
+        expect(createBody.bookingid).toBeTruthy();
+        expect(createBody.booking).toMatchObject(payload);
+        validateSchema(bookingSchemaPath, createBody.booking);
 
-    })
+        cleanupBookingIds.push(createBody.bookingid);
+        return createBody;
+    }
 
-})
+    test('Get Booking by ID', async () => {
+        const payload = buildBookingPayload(newbooking);
+        let bookingId;
+
+        await test.step('Create a booking to fetch by id', async () => {
+            const createdBooking = await createBooking(payload);
+            bookingId = createdBooking.bookingid;
+        });
+
+        await test.step('Fetch the created booking and validate its structure', async () => {
+            const response = await bookingApi.getBookingid(bookingId);
+            expect(response.status()).toBe(200);
+
+            const responseBody = await response.json();
+            validateSchema(bookingSchemaPath, responseBody);
+            expect(responseBody).toMatchObject(payload);
+        });
+    });
+
+    test('Create Booking', async () => {
+        const payload = buildBookingPayload(newbooking);
+
+        await test.step('Create a new booking and validate the returned payload', async () => {
+            await createBooking(payload);
+        });
+    });
+
+    test('Update Booking with Auth', async () => {
+        const createPayload = buildBookingPayload(newbooking);
+        const updatePayload = buildBookingPayload(updatebooking);
+        let bookingId;
+
+        await test.step('Create a booking to update', async () => {
+            const createdBooking = await createBooking(createPayload);
+            bookingId = createdBooking.bookingid;
+        });
+
+        await test.step('Update the booking using authenticated request headers', async () => {
+            const updateResponse = await bookingApi.updatebooking(
+                bookingId,
+                updatePayload,
+                bookingApi.getTokenHeaders(authToken)
+            );
+            expect(updateResponse.status()).toBe(200);
+
+            const updatedBody = await updateResponse.json();
+            validateSchema(bookingSchemaPath, updatedBody);
+            expect(updatedBody).toMatchObject(updatePayload);
+        });
+    });
+});

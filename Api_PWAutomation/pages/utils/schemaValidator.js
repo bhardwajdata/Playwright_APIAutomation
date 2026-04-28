@@ -1,13 +1,25 @@
 const Ajv = require('ajv');
 const addFormats = require('ajv-formats');
 const fs = require('fs');
+const path = require('path');
 
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
+const schemaCache = new Map();
 
-export function validateSchema(schemaPath, data) {
-    const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
-    const validate = ajv.compile(schema);
+function getSchemaValidator(schemaPath) {
+    const resolvedSchemaPath = path.resolve(schemaPath);
+
+    if (!schemaCache.has(resolvedSchemaPath)) {
+        const schema = JSON.parse(fs.readFileSync(resolvedSchemaPath, 'utf-8'));
+        schemaCache.set(resolvedSchemaPath, ajv.compile(schema));
+    }
+
+    return schemaCache.get(resolvedSchemaPath);
+}
+
+function validateSchema(schemaPath, data) {
+    const validate = getSchemaValidator(schemaPath);
 
     if (!validate(data)) {
         throw new Error(
@@ -16,3 +28,5 @@ export function validateSchema(schemaPath, data) {
         );
     }
 }
+
+module.exports = { validateSchema };

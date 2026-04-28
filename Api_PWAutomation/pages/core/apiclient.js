@@ -3,8 +3,8 @@ class apiclient {
         this.request = request;
     }
 
-    async get(url) {
-        return this.request.get(url);
+    async get(url, headers = {}) {
+        return this.request.get(url, { headers });
     }
 
     async post(url, payload = {}, headers = {}) {
@@ -21,8 +21,8 @@ class apiclient {
         });
     }
 
-    async delete(url) {
-        return await this.request.delete(url);
+    async delete(url, headers = {}) {
+        return await this.request.delete(url, { headers });
     }
 }
 

@@ -1,83 +1,107 @@
-// @ts-check
+
 const { test, expect } = require('@playwright/test')
 const platziproductapi = require('../pages/api/platziproductapi');
 const product = require('../pages/payloads/platzi/product.json');
 const updateproduct = require('../pages/payloads/platzi/updateproduct.json');
 const { validateSchema } = require('../pages/utils/schemaValidator');
 
+function clonePayload(payload) {
+    return JSON.parse(JSON.stringify(payload));
+}
+
+function buildProductPayload() {
+    const payload = clonePayload(product);
+    payload.title = `${payload.title}-${Date.now()}`;
+    return payload;
+}
+
+function buildUpdatedProductPayload() {
+    const payload = clonePayload(updateproduct);
+    payload.title = `${payload.title}-${Date.now()}`;
+    return payload;
+}
+
+function assertCategoryShape(category) {
+    expect(category).toEqual(
+        expect.objectContaining({
+            id: expect.any(Number),
+            name: expect.any(String),
+            slug: expect.any(String),
+            image: expect.any(String),
+            creationAt: expect.any(String),
+            updatedAt: expect.any(String),
+        })
+    );
+}
+
+function assertProductShape(responseBody) {
+    expect(responseBody).toEqual(
+        expect.objectContaining({
+            id: expect.any(Number),
+            title: expect.any(String),
+            price: expect.any(Number),
+            description: expect.any(String),
+            images: expect.any(Array),
+            category: expect.any(Object),
+        })
+    );
+    expect(responseBody.images.length).toBeGreaterThan(0);
+    assertCategoryShape(responseBody.category);
+}
+
 test.describe('Api opertation check @api', () => {
     test('Normal flow check', async ({ request }) => {
-        const getproduct = new platziproductapi(request);
-        const response = await getproduct.getplatziproductid(50);
-        expect(response.status()).toBe(200);
-        console.log('Status is ' + response.status());
-        const responseBody = await response.json();
-        expect(responseBody.id).toBe(50);
-        expect(typeof responseBody.title).toBe('string');
-        expect(typeof responseBody.price).toBe('number');
-        expect(typeof responseBody.description).toBe('string');
-        expect(responseBody.images).toBeInstanceOf(Array);
-        expect(responseBody.images.length).toBeGreaterThan(0);
-        expect(responseBody.category).toBeInstanceOf(Object);
+        const api = new platziproductapi(request);
+        const response = await api.getplatziproductid(85);
 
-        expect(typeof responseBody.category.id).toBe('number');
-        expect(typeof responseBody.category.name).toBe('string');
-        expect(typeof responseBody.category.slug).toBe('string');
-        expect(typeof responseBody.category.image).toBe('string');
-        expect(typeof responseBody.category.creationAt).toBe('string');
-        expect(typeof responseBody.category.updatedAt).toBe('string');
-        console.log('Get product flow passed!')
+        expect(response.status()).toBe(200);
+        const responseBody = await response.json();
+
+        expect(responseBody.id).toBe(85);
+        assertProductShape(responseBody);
     })
 
     test('Create New Product', async ({ request }) => {
-        const createproduct = new platziproductapi(request);
-        console.log('Validating product schema...');
-        validateSchema('pages/schema/platziproduct.schema.json', product);
-        console.log('Product schema validated successfully.');
+        const api = new platziproductapi(request);
+        const createPayload = buildProductPayload();
+        const updatePayload = buildUpdatedProductPayload();
+        let createdProductId;
 
-        console.log('Product creation flow started');
-        const response = await createproduct.createproduct(product);
-        expect(response.status()).toBe(201);
-        console.log('Status is ' + response.status());
-        const responseBody = await response.json();
-        console.log(responseBody);
-        const CreateProductId = responseBody.id;
-        console.log('Product created successfully with ID:', CreateProductId);
-        expect(typeof responseBody.title).toBe('string');
-        expect(typeof responseBody.price).toBe('number');
-        expect(typeof responseBody.description).toBe('string');
-        expect(responseBody.images).toBeInstanceOf(Array);
-        expect(responseBody.images.length).toBeGreaterThan(0);
-        expect(responseBody.category).toBeInstanceOf(Object);
+        validateSchema('pages/schema/platziproduct.schema.json', createPayload);
 
-        console.log('Product update with ID', CreateProductId);
-        const newresponse = await createproduct.updateproduct(
-            CreateProductId,
-            updateproduct
-        );
-        expect(newresponse.status()).toBe(200);
-        console.log('Status is ' + newresponse.status());
-        const newresponseBody = await newresponse.json();
-        console.log(newresponseBody);
-        const UpdatedProductId = newresponseBody.id;
-        console.log('Product updated successfully with ID:', UpdatedProductId);
-        expect(typeof newresponseBody.title).toBe('string');
-        expect(newresponseBody.title).toBe('Running Shoes 9');
-        expect(typeof newresponseBody.price).toBe('number');
-        expect(newresponseBody.price).toBe(2500);
-        expect(typeof newresponseBody.description).toBe('string');
-        expect(newresponseBody.description).toBe('Lightweight and comfortable running shoes designed for daily training.');
-        expect(newresponseBody.images).toBeInstanceOf(Array);
-        expect(newresponseBody.images.length).toBeGreaterThan(0);
-        expect(newresponseBody.category).toBeInstanceOf(Object);
+        try {
+            await test.step('Create product', async () => {
+                const response = await api.createproduct(createPayload);
+                expect(response.status()).toBe(201);
 
-        console.log('Deleting product with ID:', UpdatedProductId);
-        const deleteresponse = await createproduct.deleteproduct(UpdatedProductId);
-        expect(deleteresponse.status()).toBe(200);
-        console.log('Status is ' + deleteresponse.status());
-        const deleteresponseBody = await deleteresponse.json();
-        console.log(deleteresponseBody);
-        console.log('Product deleted successfully with ID:', UpdatedProductId);
+                const responseBody = await response.json();
+                createdProductId = responseBody.id;
 
+                assertProductShape(responseBody);
+                expect(responseBody.title).toBe(createPayload.title);
+                expect(responseBody.price).toBe(createPayload.price);
+                expect(responseBody.description).toBe(createPayload.description);
+            });
+
+            await test.step('Update product', async () => {
+                const response = await api.updateproduct(createdProductId, updatePayload);
+                expect(response.status()).toBe(200);
+
+                const responseBody = await response.json();
+
+                assertProductShape(responseBody);
+                expect(responseBody.id).toBe(createdProductId);
+                expect(responseBody.title).toBe(updatePayload.title);
+                expect(responseBody.price).toBe(updatePayload.price);
+                expect(responseBody.description).toBe(updatePayload.description);
+            });
+        } finally {
+            if (createdProductId) {
+                await test.step('Delete product', async () => {
+                    const response = await api.deleteproduct(createdProductId);
+                    expect(response.status()).toBe(200);
+                });
+            }
+        }
     })
 })
