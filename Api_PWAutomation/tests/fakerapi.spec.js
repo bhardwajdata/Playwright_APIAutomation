@@ -3,7 +3,7 @@ const { FakeApi } = require("../pages/api/fakerapi");
 const { test, expect } = require("@playwright/test");
 const user = require("../pages/payloads/fakeapi/user.json");
 const userupdate = require("../pages/payloads/fakeapi/userupdate.json");
-const { validateSchema } = require("../pages/utils/schemavalidator.js");
+const { validateSchema } = require("../pages/utils/schemavalidat.js");
 
 const schemapath = path.resolve(__dirname, "../pages/schema/fakeuser.schema.json");
 

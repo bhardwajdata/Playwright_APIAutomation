@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test')
 const platziproductapi = require('../pages/api/platziproductapi');
 const product = require('../pages/payloads/platzi/product.json');
 const updateproduct = require('../pages/payloads/platzi/updateproduct.json');
-const { validateSchema } = require("../pages/utils/schemavalidator.js");
+const { validateSchema } = require("../pages/utils/schemavalidat.js");
 
 function clonePayload(payload) {
     return JSON.parse(JSON.stringify(payload));
