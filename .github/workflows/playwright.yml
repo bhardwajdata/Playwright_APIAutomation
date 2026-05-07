@@ -34,11 +34,7 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-        working-directory: Api_PWAutomation
-
-      - name: Verify test discovery
-        run: npx playwright test --list
-        working-directory: Api_PWAutomation  
+        working-directory: Api_PWAutomation 
 
       - name: Run Playwright API tests
         run: npx playwright test --grep '@api' --reporter=list,playwright-smart-reporter --output=test-results/
