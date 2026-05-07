@@ -27,7 +27,7 @@ function buildUpdatedUserPayload() {
     return payload;
 }
 
-test.describe("Api Automation Test suite @fakerapi", () => {
+test.describe("Api Automation Test suite @api", () => {
     test.describe.configure({ mode: "serial" });
 
     let fakeapi;

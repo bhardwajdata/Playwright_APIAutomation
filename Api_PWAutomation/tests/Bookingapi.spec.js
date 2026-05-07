@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 const BookingApi = require('../pages/api/bookingapi');
 const newbooking = require('../pages/payloads/newbooking.json');
 const updatebooking = require('../pages/payloads/updatebooking.json');
-const { validateSchema } = require('../pages/utils/schemaValidator');
+const { validateSchema } = require("../pages/utils/schemavalidator.js");
 
 const bookingSchemaPath = path.resolve(__dirname, '../pages/schema/newBooking.schema.json');
 
