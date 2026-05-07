@@ -31,19 +31,27 @@ test.describe("Api Automation Test suite @fakerapi", () => {
         expect(responsebody.name).toBe(user.name);
         userId = responsebody.id;
         console.log("User Created with ID: " + userId);
-        await test.step("Update User By Id", async () => {
-            const response = await fakeapi.updateUser(userId, userupdate);
-            console.log("Update Response: " + response.status());
-            expect(response.status()).toBe(200);
-            const responsebody = await response.json();
-            validateSchema(schemapath, responsebody);
-            console.log('Update API Response Schema is Validated')
-            expect(responsebody.role).toBe(userupdate.role);
-        })
-        await test.step("Delete User By Id", async () => {
-            const response = await fakeapi.deleteUser(userId);
-            expect(response.status()).toBe(200);
-            console.log('User deleted with id : ' + userId);
-        })
+        try {
+            if (!userId) {
+                throw new Error("User ID is undefined or null");
+            }
+            await test.step("Update User By Id", async () => {
+                const response = await fakeapi.updateUser(userId, userupdate);
+                console.log("Update Response: " + response.status());
+                expect(response.status()).toBe(200);
+                const responsebody = await response.json();
+                validateSchema(schemapath, responsebody);
+                console.log('Update API Response Schema is Validated')
+                expect(responsebody.role).toBe(userupdate.role);
+            })
+        } finally {
+            if (userId) {
+                await test.step("Delete User By Id", async () => {
+                    const response = await fakeapi.deleteUser(userId);
+                    expect(response.status()).toBe(200);
+                    console.log('User deleted with id : ' + userId);
+                });
+            }
+        }
     });
 });
