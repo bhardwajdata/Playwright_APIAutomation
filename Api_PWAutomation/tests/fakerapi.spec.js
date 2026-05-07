@@ -17,7 +17,6 @@ function buildUserPayload() {
 
     payload.email = `fakeapi-${uniqueValue}@gmail.com`;
     payload.name = `${payload.name} ${uniqueValue}`;
-
     return payload;
 }
 
