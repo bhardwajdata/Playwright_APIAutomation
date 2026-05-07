@@ -3,7 +3,7 @@ const addFormats = require('ajv-formats');
 const fs = require('fs');
 const path = require('path');
 
-const ajv = new Ajv({ allErrors: true, strict: false });
+const ajv = new Ajv({ allErrors: true, strict: true });
 addFormats(ajv);
 const schemaCache = new Map();
 

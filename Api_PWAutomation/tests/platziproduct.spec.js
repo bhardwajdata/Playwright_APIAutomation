@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test')
 const platziproductapi = require('../pages/api/platziproductapi');
 const product = require('../pages/payloads/platzi/product.json');
 const updateproduct = require('../pages/payloads/platzi/updateproduct.json');
-const { validateSchema } = require('../pages/utils/schemaValidator');
+const { validateSchema } = require("../pages/utils/schemavalidator.js");
 
 function clonePayload(payload) {
     return JSON.parse(JSON.stringify(payload));
@@ -52,12 +52,12 @@ function assertProductShape(responseBody) {
 test.describe('Api opertation check @api', () => {
     test('Normal flow check', async ({ request }) => {
         const api = new platziproductapi(request);
-        const response = await api.getplatziproductid(85);
+        const response = await api.getplatziproductid(35);
 
         expect(response.status()).toBe(200);
         const responseBody = await response.json();
 
-        expect(responseBody.id).toBe(85);
+        expect(responseBody.id).toBe(35);
         assertProductShape(responseBody);
     })
 
