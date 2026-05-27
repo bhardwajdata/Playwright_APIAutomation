@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   api-tests:
@@ -16,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:     
           node-version: lts/*
           cache: npm
@@ -42,4 +43,17 @@ jobs:
         with:
           name: playwright-report
           path: Api_PWAutomation/tests/smart-report.html
+
+  cleanup-old-workflow-runs:
+    needs: api-tests
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 1
+          keep_minimum_runs: 2
 
